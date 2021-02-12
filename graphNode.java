@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class graphNode {
-    public String vertex;
-    public int square;
+    public String vertex; // vertex id keeping as string to use in hash map
+    public int square; // square the vertex is in
     public ArrayList<edge> edges = new ArrayList<edge>();
 
     public graphNode(String Vertex, int Square){

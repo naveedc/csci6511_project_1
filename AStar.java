@@ -11,6 +11,7 @@ public class AStar {
         HashMap<String, Entry> distances = new HashMap<String, Entry>();
     
         Queue<AStartEntry> pQ = new PriorityQueue<>();
+        // using new Entry object to contain more info for informed search 
         vistedNodes.clear();
         distances.clear();
         Set< String> keys = graph.keySet();
@@ -19,24 +20,29 @@ public class AStar {
             distances.put(key, new Entry(key, Double.POSITIVE_INFINITY, key));
             vistedNodes.put(key,  false);
         }
+        //adding start node to priority queue
         AStartEntry startEntry = new AStartEntry(start, 0.0, start, 0.0);
         pQ.add(startEntry);
 
+        //counter to test efficency 
         int totalNodesChecked = 0;
         while(pQ.size() > 0){
-           
+           //remove top value of priority queue
             totalNodesChecked++;
             AStartEntry currentEntry = pQ.poll();
             graphNode currentNode =  graph.get(currentEntry.key);
             ArrayList<edge> edges = currentNode.edges;
             for( edge currentEdge : edges ) {
-
+                // only checking not visited nodes
                 if(!vistedNodes.get(currentEdge.destination)){
                     double newDistance = currentEdge.distance + currentEntry.value;
                     double  nextNodeDistance = distances.get(currentEdge.destination).value;
                     double  destinationDistance = distances.get(end).value;
+                    // only update distance and queue is distance is smaller and less than current distance to destination
                     if( newDistance <= nextNodeDistance && newDistance <destinationDistance ){
-                        double squareDist = squareDistanceToEnd(graph.get(currentEdge.destination).square, graph.get(end).square);
+
+                        // get new grid distance value for inform prioritization
+                        double squareDist = gridDistanceToEnd(graph.get(currentEdge.destination).square, graph.get(end).square);
                         distances.put(currentEdge.destination, new Entry(currentEdge.destination, newDistance, currentEntry.key) );
                         AStartEntry newEntry = new AStartEntry(currentEdge.destination, newDistance, currentEntry.key, squareDist);
                         // stop adding to queue after reach destination
@@ -62,7 +68,9 @@ public class AStar {
         return Path;
     }
 
-    public double squareDistanceToEnd(double currentSquare, double EndSquare){
+    //convert square number to x and y coords 
+    // then taking euclidean distance
+    public double gridDistanceToEnd(double currentSquare, double EndSquare){
         double x1 = (currentSquare % 10) * 100;
         double y1 = Math.floor(currentSquare / 10) * 100;
 

@@ -12,10 +12,10 @@ public class project1 {
   public static void main(String[] args) {
 
     // will model our graph as hash map with graphNode and edge objects
+    // wrote ingest function
     System.out.println("Ingesting file!");
     fileIngest();
-    System.out.print("our graph has a size of ");
-    System.out.println(graph.size());
+    
     System.out.println(String.format("finding shortest path from %s tp %s", Start, Destination));
 
     System.out.println("running Dijkstra");
@@ -48,12 +48,14 @@ public class project1 {
             }
             if (line.charAt(0) != '#') {
               if (Vertices) {
+                // populating hashMap graph from file
                 String[] values = line.split(",");
                 
                 graphNode node = new graphNode(values[0], Integer.parseInt(values[1]));
                 graph.put(values[0], node);
               } else {
-                
+                // adding edges for appropriate nodes
+                // each line turns into two edges going either way
                 String[] values = line.split(",");
                 graph.get(values[0]).addEdge(values[1], Double.parseDouble(values[2]));
                 graph.get(values[1]).addEdge(values[0], Double.parseDouble(values[2]));
@@ -61,6 +63,7 @@ public class project1 {
             }
           } else {
             if (line.charAt(0) != '#') {
+              //get start and end locations
               String[] values = line.split(",");
               if (values[0].equals("S")) {
                 Start = values[1];

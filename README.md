@@ -6,7 +6,9 @@ How to run code:
 2) open terminal 
 3) navigate to folder with source code
 4) run in termainal
+
   $javac project1.java
+  
   $java project1
 
 
